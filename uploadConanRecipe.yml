@@ -7,6 +7,7 @@ steps:
     versionSpec: "3.x"
     addToPath: true
     architecture: "x64"
+  displayName: 'Setup python'
 
 - script: |
     pip install conan
@@ -14,6 +15,7 @@ steps:
   displayName: 'Install conan'
   
 - task: PythonScript@0
+  displayName: 'Upload recipe'
   env: ${{ parameters.conanEnv }}
   inputs:
       scriptSource: inline
