@@ -1,3 +1,6 @@
+parameters:
+  additionalEnv: {}
+
 steps:
 - task: UsePythonVersion@0
   inputs:
@@ -12,6 +15,7 @@ steps:
   displayName: 'Install conan'
   
 - task: PythonScript@0
+  env: ${{ parameters.additionalEnv }}
   inputs:
       scriptSource: inline
       script: |
