@@ -1,5 +1,5 @@
 parameters:
-  additionalEnv: {}
+  conanEnv: {}
 
 steps:
 - task: UsePythonVersion@0
@@ -15,7 +15,7 @@ steps:
   displayName: 'Install conan'
   
 - task: PythonScript@0
-  env: ${{ parameters.additionalEnv }}
+  env: ${{ parameters.conanEnv }}
   inputs:
       scriptSource: inline
       script: |
@@ -54,7 +54,7 @@ steps:
             name = check_output(["conan", "inspect", ".", "-a", "name"]).decode("ascii").rstrip()
             package_ref = "%s/%s" % (user_name, user_channel)
             package_name = "%s/%s@%s" % (name[6:], version[9:], package_ref)
-            print("Exporting recipe with reference:" + package_ref)
+            print("Exporting recipe with reference: " + package_ref)
             check_output(["conan", "export", ".", package_ref])
             print("Uploading recipe: " + package_name)
             check_output(["conan", "upload", package_name, "-r", rep_name])
