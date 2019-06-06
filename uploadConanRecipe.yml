@@ -10,7 +10,7 @@ steps:
   displayName: 'Setup python'
 
 - script: |
-    pip install conan
+    pip install conan==1.12.3
     conan user
   displayName: 'Install conan'
   
