@@ -10,8 +10,8 @@ steps:
   displayName: 'Setup python'
 
 - script: |
-    pip install conan
-    pip install conan_package_tools
+    pip install conan==1.12.3
+    pip install conan_package_tools==0.24.0
     conan user
   displayName: 'Install conan'
   
@@ -74,4 +74,3 @@ steps:
             builder = ConanMultiPackager(build_policy="outdated", upload_retry=3, upload_only_recipe=True)
             builder.add()
             builder.run(os.path.abspath("./ci-profile"))
-
