@@ -10,6 +10,7 @@ steps:
   displayName: 'Setup python'
 
 - script: |
+    pip install --upgrade pip
     pip install conan==1.12.3
     pip install conan_package_tools==0.25.1
     conan user
