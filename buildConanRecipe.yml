@@ -29,6 +29,8 @@ steps:
         if __name__ == "__main__":
 
             os.environ["CONAN_PRINT_RUN_COMMANDS"] = "True"
+            os.environ["CONAN_RETRY"] = "10"
+            os.environ["CONAN_RETRY_WAIT"] = "10"
             os.system("conan profile new ./ci-profile")
             if 'CONAN_BASE_PROFILE_OS' in os.environ:
                 os.system("conan profile update settings.os=\"%s\" ./ci-profile" % os.environ['CONAN_BASE_PROFILE_OS'])
