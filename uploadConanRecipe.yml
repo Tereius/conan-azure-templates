@@ -35,11 +35,15 @@ steps:
 
             user_name = "user"
             user_channel = "testing"
+            upload_all = False
             if 'CONAN_USERNAME' in os.environ:
                 user_name = os.environ['CONAN_USERNAME']
 
             if 'CONAN_CHANNEL' in os.environ:
                 user_channel = os.environ['CONAN_CHANNEL']
+            
+            if 'UPLOAD_ALL' in os.environ:
+                upload_all = True
             
             if not 'CONAN_UPLOAD' in os.environ:
                 print('Missing "CONAN_UPLOAD" env. variable')
@@ -59,5 +63,9 @@ steps:
             package_name = "%s/%s@%s" % (name[6:], version[9:], package_ref)
             print("Exporting recipe with reference: " + package_ref)
             check_output(["conan", "export", ".", package_ref])
-            print("Uploading recipe: " + package_name)
-            check_output(["conan", "upload", package_name, "-r", rep_name])
+            if upload_all:
+                print("Uploading recipe and package: " + package_name)
+                check_output(["conan", "upload", package_name, "-r", rep_name, "--all"])
+            else:
+                print("Uploading recipe: " + package_name)
+                check_output(["conan", "upload", package_name, "-r", rep_name])          
