@@ -82,6 +82,6 @@ steps:
             for remote in os.environ['CONAN_REMOTES'].split(','):
                 rep_name = randomString()
                 print("Adding remote: " + rep_name + " url: " + remote)
-                check_output(["conan", "remote", "add", "-f", rep_name, remote])
+                os.system("conan remote add -f %s %s" % (rep_name, remote))
             
-            check_output(["conan", "create", ".", user_name + "/" + user_channel, "-pr", "./ci-profile", "-b", "outdated"])
+            os.system("conan create . %s/%s -pr ./ci-profile -b outdated" % (user_name, user_channel))
