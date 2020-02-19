@@ -12,7 +12,6 @@ steps:
 - script: |
     pip install --upgrade pip
     pip install conan==1.16.1
-    pip install conan_package_tools==0.28.1
     conan user
   displayName: 'Install conan'
   
@@ -22,7 +21,6 @@ steps:
   inputs:
       scriptSource: inline
       script: |
-        from conan.packager import ConanMultiPackager
         from subprocess import check_output
         import os
 
@@ -74,6 +72,4 @@ steps:
             if 'CONAN_CHANNEL' in os.environ:
                 user_channel = os.environ['CONAN_CHANNEL']
             
-            builder = ConanMultiPackager(build_policy="outdated", upload_retry=3, upload_only_recipe=True)
-            builder.add()
-            builder.run(os.path.abspath("./ci-profile"))
+            check_output(["conan", "create", ".", "-pr", "./ci-profile", "-b", "outdated"])
