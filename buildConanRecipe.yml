@@ -25,6 +25,7 @@ steps:
         import os
         import random
         import string
+        import sys
 
 
         def randomString(stringLength=10):
@@ -84,4 +85,4 @@ steps:
                 print("Adding remote: " + rep_name + " url: " + remote)
                 os.system("conan remote add -f %s %s" % (rep_name, remote))
             
-            os.system("conan create . %s/%s -pr ./ci-profile -b outdated" % (user_name, user_channel))
+            sys.exit(os.system("conan create . %s/%s -pr ./ci-profile -b outdated" % (user_name, user_channel)))
