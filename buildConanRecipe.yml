@@ -72,4 +72,4 @@ steps:
             if 'CONAN_CHANNEL' in os.environ:
                 user_channel = os.environ['CONAN_CHANNEL']
             
-            check_output(["conan", "create", ".", "-pr", "./ci-profile", "-b", "outdated"])
+            check_output(["conan", "create", ".", user_name + "/" + user_channel, "-pr", "./ci-profile", "-b", "outdated"])
