@@ -24,6 +24,10 @@ steps:
         from subprocess import check_output
         import os
 
+        def randomString(stringLength=10):
+            letters = string.ascii_lowercase
+            return ''.join(random.choice(letters) for i in range(stringLength))
+        
         if __name__ == "__main__":
 
             os.environ["CONAN_PRINT_RUN_COMMANDS"] = "True"
@@ -71,5 +75,10 @@ steps:
 
             if 'CONAN_CHANNEL' in os.environ:
                 user_channel = os.environ['CONAN_CHANNEL']
+
+            for remote in os.environ['CONAN_REMOTES'].split(','):
+                rep_name = randomString()
+                print("Adding remote: " + rep_name + " url: " + remote)
+                check_output(["conan", "remote", "add", "-f", rep_name, remote])
             
             check_output(["conan", "create", ".", user_name + "/" + user_channel, "-pr", "./ci-profile", "-b", "outdated"])
