@@ -14,6 +14,29 @@ steps:
     pip install conan==1.18.6
     conan user
   displayName: 'Install conan'
+
+- task: PythonScript@0
+  displayName: 'Switch default build tools'
+  env: ${{ parameters.conanEnv }}
+  inputs:
+      scriptSource: inline
+      script: |
+        from subprocess import check_output
+        from conans import tools
+        import os
+        
+        if __name__ == "__main__":
+            if tools.is_apple_os():
+                if 'CONAN_BASE_PROFILE_COMPILER_VERSION' in os.environ:
+                    clang_ver = os.environ['CONAN_BASE_PROFILE_COMPILER_VERSION'].split(".")
+                    major = int(clang_ver[0])
+                    print("Switching to Xcode major version: " + major)
+                    if major == 9:
+                        os.system("sudo xcode-select -switch /Applications/Xcode_9.4.1.app")
+                    elif major == 10:
+                        os.system("sudo xcode-select -switch /Applications/Xcode_10.3.app")
+                    elif major == 11:
+                        os.system("sudo xcode-select -switch /Applications/Xcode_11.3.1.app")
   
 - task: PythonScript@0
   displayName: 'Build recipe'
@@ -27,17 +50,17 @@ steps:
         import string
         import sys
 
-
         def randomString(stringLength=10):
             letters = string.ascii_lowercase
             return ''.join(random.choice(letters) for i in range(stringLength))
         
         if __name__ == "__main__":
-
+        
             os.environ["CONAN_PRINT_RUN_COMMANDS"] = "True"
             os.environ["CONAN_RETRY"] = "10"
             os.environ["CONAN_RETRY_WAIT"] = "10"
             os.system("conan profile new ./ci-profile")
+            
             if 'CONAN_BASE_PROFILE_OS' in os.environ:
                 os.system("conan profile update settings.os=\"%s\" ./ci-profile" % os.environ['CONAN_BASE_PROFILE_OS'])
 
