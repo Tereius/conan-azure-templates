@@ -22,11 +22,11 @@ steps:
       scriptSource: inline
       script: |
         from subprocess import check_output
-        from conans import tools
+        from conans import os_info
         import os
         
         if __name__ == "__main__":
-            if tools.is_apple_os():
+            if os_info.is_macos:
                 if 'CONAN_BASE_PROFILE_COMPILER_VERSION' in os.environ:
                     clang_ver = os.environ['CONAN_BASE_PROFILE_COMPILER_VERSION'].split(".")
                     major = int(clang_ver[0])
