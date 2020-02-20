@@ -30,7 +30,7 @@ steps:
                 if 'CONAN_BASE_PROFILE_COMPILER_VERSION' in os.environ:
                     clang_ver = os.environ['CONAN_BASE_PROFILE_COMPILER_VERSION'].split(".")
                     major = int(clang_ver[0])
-                    print("Switching to Xcode major version: " + major)
+                    print("Switching to Xcode major version: " + str(major))
                     if major == 9:
                         os.system("sudo xcode-select -switch /Applications/Xcode_9.4.1.app")
                     elif major == 10:
