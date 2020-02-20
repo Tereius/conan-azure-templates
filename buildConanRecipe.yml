@@ -22,7 +22,7 @@ steps:
       scriptSource: inline
       script: |
         from subprocess import check_output
-        from conans import os_info
+        from conans.tools import os_info
         import os
         
         if __name__ == "__main__":
