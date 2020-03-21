@@ -65,7 +65,7 @@ steps:
             check_output(["conan", "export", ".", package_ref])
             if upload_all:
                 print("Uploading recipe and package: " + package_name)
-                check_output(["conan", "upload", package_name, "-r", rep_name, "--all", --retry, 3, --retry-wait, 240])
+                check_output(["conan", "upload", package_name, "-r", rep_name, "--all", "--retry", "3", "--retry-wait", "240"])
             else:
                 print("Uploading recipe: " + package_name)
-                check_output(["conan", "upload", package_name, "-r", rep_name, --retry, 3, --retry-wait, 240])          
+                check_output(["conan", "upload", package_name, "-r", rep_name, "--retry", "3", "--retry-wait", "240"])          
