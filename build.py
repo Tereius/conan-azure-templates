@@ -74,4 +74,13 @@ if __name__ == "__main__":
         print("Adding remote: " + rep_name + " url: " + remote)
         os.system("conan remote add -f %s %s" % (rep_name, remote))
 
-    sys.exit(os.system("conan create . %s/%s -pr ./ci-profile -b outdated" % (user_name, user_channel)))
+    version = check_output(["conan", "inspect", ".", "-a", "version"]).decode("ascii").rstrip()
+    name = check_output(["conan", "inspect", ".", "-a", "name"]).decode("ascii").rstrip()
+    package_ref = "%s/%s" % (user_name, user_channel)
+    package_name = "%s/%s@%s" % (name[6:], version[9:], package_ref)
+
+    print("Building recipe with reference: " + package_ref)
+    os.system("conan create . %s/%s -pr ./ci-profile -b outdated" % (user_name, user_channel))
+
+    print("Installing artifacts")
+    os.system("conan install %s -pr ./ci-profile" % package_name)
