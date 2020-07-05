@@ -80,7 +80,7 @@ if __name__ == "__main__":
     package_name = "%s/%s@%s" % (name[6:], version[9:], package_ref)
 
     print("Building recipe with reference: " + package_ref)
-    os.system("conan create . %s/%s -pr ./ci-profile --build=%s --build=outdated" % (user_name, user_channel, name))
+    os.system("conan create . %s/%s -pr ./ci-profile -b %s -b outdated" % (user_name, user_channel, name))
 
     print("Installing artifacts")
     os.system("conan install %s -pr ./ci-profile" % package_name)
