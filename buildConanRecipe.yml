@@ -3,6 +3,7 @@ parameters:
 
 steps:
 - checkout: self
+    path: ./
 - checkout: templates
 - task: UsePythonVersion@0
   inputs:
@@ -50,4 +51,4 @@ steps:
   env: ${{ parameters.conanEnv }}
   inputs:
       scriptSource: filePath
-      scriptPath: ../conan-azure-templates/build.py
+      scriptPath: ./conan-azure-templates/build.py
