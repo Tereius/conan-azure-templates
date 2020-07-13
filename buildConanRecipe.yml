@@ -4,7 +4,6 @@ parameters:
 steps:
 - checkout: self
 - checkout: templates
-  path: $(Pipeline.Workspace)/s/conan-azure-templates
 - task: UsePythonVersion@0
   inputs:
     versionSpec: "3.6.x"
