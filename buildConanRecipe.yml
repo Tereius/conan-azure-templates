@@ -3,7 +3,6 @@ parameters:
 
 steps:
 - checkout: self
-  path: $(Build.SourcesDirectory)/rootDir
 - checkout: templates
   path: $(Build.SourcesDirectory)/conan-azure-templates
 - task: UsePythonVersion@0
@@ -53,4 +52,4 @@ steps:
   inputs:
       scriptSource: filePath
       scriptPath: $(Build.SourcesDirectory)/conan-azure-templates/build.py
-      workingDirectory: $(Build.SourcesDirectory)/rootDir
+      workingDirectory: $(Build.SourcesDirectory)
