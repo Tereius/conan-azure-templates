@@ -3,9 +3,9 @@ parameters:
 
 steps:
 - checkout: self
-  path: $(Agent.BuildDirectory)/build
+  path: $(Build.SourcesDirectory)/build
 - checkout: templates
-  path: $(Agent.BuildDirectory)/conan-azure-templates
+  path: $(Build.SourcesDirectory)/conan-azure-templates
 - task: UsePythonVersion@0
   inputs:
     versionSpec: "3.6.x"
@@ -52,5 +52,5 @@ steps:
   env: ${{ parameters.conanEnv }}
   inputs:
       scriptSource: filePath
-      scriptPath: $(Agent.BuildDirectory)/conan-azure-templates/build.py
-      workingDirectory: $(Agent.BuildDirectory)/build
+      scriptPath: $(Build.SourcesDirectory)/conan-azure-templates/build.py
+      workingDirectory: $(Build.SourcesDirectory)/build
