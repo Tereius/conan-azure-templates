@@ -3,6 +3,7 @@ parameters:
 
 steps:
 - checkout: self
+  path: sourceCode
 - checkout: templates
 - task: UsePythonVersion@0
   inputs:
@@ -20,6 +21,8 @@ steps:
 - script: |
     ls -la .
     ls -la ..
+    pwd
+    echo $(Build.Repository.Name)
   displayName: 'ls dirs'
   
 - task: PythonScript@0
