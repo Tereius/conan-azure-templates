@@ -3,7 +3,7 @@ parameters:
 
 steps:
 - checkout: self
-    path: ./
+  path: .
 - checkout: templates
 - task: UsePythonVersion@0
   inputs:
