@@ -5,6 +5,7 @@ steps:
 - checkout: self
   path: sourceCode
 - checkout: templates
+  path: helper
 - task: UsePythonVersion@0
   inputs:
     versionSpec: "3.6.x"
@@ -53,5 +54,5 @@ steps:
   env: ${{ parameters.conanEnv }}
   inputs:
       scriptSource: filePath
-      scriptPath: $(Pipeline.Workspace)/s/conan-azure-templates/build.py
+      scriptPath: $(Pipeline.Workspace)/helper/build.py
       workingDirectory: $(Pipeline.Workspace)/sourceCode
