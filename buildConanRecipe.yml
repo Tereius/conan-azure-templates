@@ -17,6 +17,11 @@ steps:
     conan user
   displayName: 'Install conan'
 
+- script: |
+    ls -la .
+    ls -la ..
+  displayName: 'ls dirs'
+  
 - task: PythonScript@0
   displayName: 'Switch default build tools'
   env: ${{ parameters.conanEnv }}
