@@ -54,4 +54,4 @@ steps:
   inputs:
       scriptSource: filePath
       scriptPath: $(Pipeline.Workspace)/s/conan-azure-templates/build.py
-      workingDirectory: $(Pipeline.Workspace)/s/$(Build.Repository.Name)
+      workingDirectory: sourceCode
