@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from subprocess import check_output, run
+from subprocess import check_output, check_call
 import os
 import random
 import string
@@ -83,7 +83,7 @@ if __name__ == "__main__":
     package_name = "%s/%s@%s" % (name[6:], version[9:], package_ref)
 
     print("Building recipe with reference: " + package_ref)
-    os.run(["conan", "create", ".", "%s/%s" % (user_name, user_channel), "-pr", "./ci-profile", "-b", "outdated"], shell=True, check=True)
+    os.check_call(["conan", "create", ".", "%s/%s" % (user_name, user_channel), "-pr", "./ci-profile", "-b", "outdated"], shell=True)
 
     print("Installing artifacts")
-    os.run(["conan", "install", "%s" % package_name, "-pr", "./ci-profile"], shell=True, check=True)
+    os.check_call(["conan", "install", "%s" % package_name, "-pr", "./ci-profile"], shell=True)
