@@ -78,8 +78,8 @@ if __name__ == "__main__":
             print("Adding remote: " + rep_name + " url: " + remote)
             os.system("conan remote add -f %s %s" % (rep_name, remote))
 
-    version = "1.1.1"#check_output(["conan", "inspect", ".", "-a", "version"]).decode("ascii").rstrip()
-    name = "test" #check_output(["conan", "inspect", ".", "-a", "name"]).decode("ascii").rstrip()
+    version = check_output(["conan", "inspect", ".", "-a", "version"]).decode("ascii").rstrip()
+    name = check_output(["conan", "inspect", ".", "-a", "name"]).decode("ascii").rstrip()
     package_ref = "%s/%s" % (user_name, user_channel)
     package_name = "%s/%s@%s" % (name[6:], version[9:], package_ref)
 
