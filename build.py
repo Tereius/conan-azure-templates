@@ -72,18 +72,19 @@ if __name__ == "__main__":
     if 'CONAN_CHANNEL' in os.environ:
         user_channel = os.environ['CONAN_CHANNEL']
 
-    for remote in os.environ['CONAN_REMOTES'].split(','):
-        rep_name = randomString()
-        print("Adding remote: " + rep_name + " url: " + remote)
-        os.system("conan remote add -f %s %s" % (rep_name, remote))
+    if 'CONAN_REMOTES' in os.environ:
+        for remote in os.environ['CONAN_REMOTES'].split(','):
+            rep_name = randomString()
+            print("Adding remote: " + rep_name + " url: " + remote)
+            os.system("conan remote add -f %s %s" % (rep_name, remote))
 
-    version = check_output(["conan", "inspect", ".", "-a", "version"]).decode("ascii").rstrip()
-    name = check_output(["conan", "inspect", ".", "-a", "name"]).decode("ascii").rstrip()
+    version = "1.1.1"#check_output(["conan", "inspect", ".", "-a", "version"]).decode("ascii").rstrip()
+    name = "test" #check_output(["conan", "inspect", ".", "-a", "name"]).decode("ascii").rstrip()
     package_ref = "%s/%s" % (user_name, user_channel)
     package_name = "%s/%s@%s" % (name[6:], version[9:], package_ref)
 
     print("Building recipe with reference: " + package_ref)
-    check_call(["conan", "create", ".", "%s/%s" % (user_name, user_channel), "-pr", "./ci-profile", "-b", "outdated"], shell=True)
+    check_call("conan create . %s/%s -pr ./ci-profile -b outdated" % (user_name, user_channel), shell=True)
 
     print("Installing artifacts")
-    check_call(["conan", "install", "%s" % package_name, "-pr", "./ci-profile"], shell=True)
+    check_call("conan install %s -pr ./ci-profile" % package_name, shell=True)
