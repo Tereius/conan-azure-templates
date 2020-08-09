@@ -14,6 +14,9 @@ def randomString(stringLength=10):
 
 if __name__ == "__main__":
 
+    print("Using Python version")
+    print (sys.version)
+
     os.environ["CONAN_PRINT_RUN_COMMANDS"] = "True"
     os.environ["CONAN_RETRY"] = "10"
     os.environ["CONAN_RETRY_WAIT"] = "10"
