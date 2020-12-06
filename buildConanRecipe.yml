@@ -4,6 +4,7 @@ parameters:
 steps:
 - checkout: self
   path: sourceCode
+  lfs: true
 - checkout: templates
   path: helper
 - task: UsePythonVersion@0
