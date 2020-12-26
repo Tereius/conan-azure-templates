@@ -12,57 +12,72 @@ def randomString(stringLength=10):
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(stringLength))
 
+
 if __name__ == "__main__":
 
     print("Using Python version")
-    print (sys.version)
+    print(sys.version)
 
     os.environ["CONAN_PRINT_RUN_COMMANDS"] = "True"
     os.environ["CONAN_RETRY"] = "10"
     os.environ["CONAN_RETRY_WAIT"] = "10"
+    profile_path = "./ci-profile"
     os.system("conan profile new ./ci-profile")
 
+    if 'CONAN_BASE_PROFILE_PATH' in os.environ:
+        profile_path = os.environ['CONAN_BASE_PROFILE_PATH']
+
     if 'CONAN_BASE_PROFILE_OS' in os.environ:
-        os.system("conan profile update settings.os=\"%s\" ./ci-profile" % os.environ['CONAN_BASE_PROFILE_OS'])
+        os.system(
+            "conan profile update settings.os=\"%s\" \"%s\"" % (os.environ['CONAN_BASE_PROFILE_OS'], profile_path))
 
     if 'CONAN_BASE_PROFILE_OS_API' in os.environ:
         os.system(
-            "conan profile update settings.os.api_level=\"%s\" ./ci-profile" % os.environ['CONAN_BASE_PROFILE_OS_API'])
+            "conan profile update settings.os.api_level=\"%s\" \"%s\"" % (
+                os.environ['CONAN_BASE_PROFILE_OS_API'], profile_path))
 
     if 'CONAN_BASE_PROFILE_OS_VERSION' in os.environ:
-        os.system("conan profile update settings.os.version=\"%s\" ./ci-profile" % os.environ[
-            'CONAN_BASE_PROFILE_OS_VERSION'])
+        os.system("conan profile update settings.os.version=\"%s\" \"%s\"" % (os.environ[
+                                                                                  'CONAN_BASE_PROFILE_OS_VERSION'],
+                                                                              profile_path))
 
     if 'CONAN_BASE_PROFILE_OSBUILD' in os.environ:
         os.system(
-            "conan profile update settings.os_build=\"%s\" ./ci-profile" % os.environ['CONAN_BASE_PROFILE_OSBUILD'])
+            "conan profile update settings.os_build=\"%s\" \"%s\"" % (
+                os.environ['CONAN_BASE_PROFILE_OSBUILD'], profile_path))
 
     if 'CONAN_BASE_PROFILE_ARCH' in os.environ:
-        os.system("conan profile update settings.arch=\"%s\" ./ci-profile" % os.environ['CONAN_BASE_PROFILE_ARCH'])
+        os.system(
+            "conan profile update settings.arch=\"%s\" \"%s\"" % (os.environ['CONAN_BASE_PROFILE_ARCH'], profile_path))
 
     if 'CONAN_BASE_PROFILE_ARCHBUILD' in os.environ:
         os.system(
-            "conan profile update settings.arch_build=\"%s\" ./ci-profile" % os.environ['CONAN_BASE_PROFILE_ARCHBUILD'])
+            "conan profile update settings.arch_build=\"%s\" \"%s\"" % (
+                os.environ['CONAN_BASE_PROFILE_ARCHBUILD'], profile_path))
 
     if 'CONAN_BASE_PROFILE_COMPILER' in os.environ:
         os.system(
-            "conan profile update settings.compiler=\"%s\" ./ci-profile" % os.environ['CONAN_BASE_PROFILE_COMPILER'])
+            "conan profile update settings.compiler=\"%s\" \"%s\"" % (
+                os.environ['CONAN_BASE_PROFILE_COMPILER'], profile_path))
 
     if 'CONAN_BASE_PROFILE_COMPILER_VERSION' in os.environ:
-        os.system("conan profile update settings.compiler.version=\"%s\" ./ci-profile" % os.environ[
-            'CONAN_BASE_PROFILE_COMPILER_VERSION'])
+        os.system("conan profile update settings.compiler.version=\"%s\" \"%s\"" % (os.environ[
+                                                                                        'CONAN_BASE_PROFILE_COMPILER_VERSION'],
+                                                                                    profile_path))
 
     if 'CONAN_BASE_PROFILE_COMPILER_LIBCXX' in os.environ:
-        os.system("conan profile update settings.compiler.libcxx=\"%s\" ./ci-profile" % os.environ[
-            'CONAN_BASE_PROFILE_COMPILER_LIBCXX'])
+        os.system("conan profile update settings.compiler.libcxx=\"%s\" \"%s\"" % (os.environ[
+                                                                                       'CONAN_BASE_PROFILE_COMPILER_LIBCXX'],
+                                                                                   profile_path))
 
     if 'CONAN_BASE_PROFILE_BUILDTYPE' in os.environ:
         os.system(
-            "conan profile update settings.build_type=\"%s\" ./ci-profile" % os.environ['CONAN_BASE_PROFILE_BUILDTYPE'])
+            "conan profile update settings.build_type=\"%s\" \"%s\"" % (
+                os.environ['CONAN_BASE_PROFILE_BUILDTYPE'], profile_path))
 
     if 'CONAN_OPTIONS' in os.environ:
         for option in os.environ['CONAN_OPTIONS'].split(','):
-            os.system("conan profile update options.%s ./ci-profile" % option)
+            os.system("conan profile update options.%s \"%s\"" % (option, profile_path))
 
     user_name = "user"
     user_channel = "testing"
@@ -84,7 +99,7 @@ if __name__ == "__main__":
     package_name = "%s/%s@%s" % (name[6:], version[9:], package_ref)
 
     print("Building recipe with reference: " + package_ref)
-    check_call("conan create . %s/%s -pr ./ci-profile -b outdated" % (user_name, user_channel), shell=True)
+    check_call("conan create . %s/%s -pr \"%s\" -b outdated" % (user_name, user_channel, profile_path), shell=True)
 
     print("Installing artifacts")
-    check_call("conan install %s -pr ./ci-profile" % package_name, shell=True)
+    check_call("conan install %s -pr \"%s\"" % (package_name, profile_path), shell=True)
