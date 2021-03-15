@@ -22,10 +22,14 @@ if __name__ == "__main__":
     os.environ["CONAN_RETRY"] = "10"
     os.environ["CONAN_RETRY_WAIT"] = "10"
     profile_path = "./ci-profile"
+    build_profile_path = None
     os.system("conan profile new ./ci-profile")
 
     if 'CONAN_BASE_PROFILE_PATH' in os.environ:
         profile_path = os.environ['CONAN_BASE_PROFILE_PATH']
+
+    if 'CONAN_BUILD_PROFILE' in os.environ:
+        build_profile_path = os.environ['CONAN_BUILD_PROFILE']
 
     if 'CONAN_BASE_PROFILE_OS' in os.environ:
         os.system(
@@ -99,7 +103,10 @@ if __name__ == "__main__":
     package_name = "%s/%s@%s" % (name[6:], version[9:], package_ref)
 
     print("Building recipe with reference: " + package_ref)
-    check_call("conan create . %s/%s -pr \"%s\" -b outdated" % (user_name, user_channel, profile_path), shell=True)
+    if build_profile_path is not None:
+        check_call("conan create . %s/%s -pr:h \"%s\" -pr:b \"%s\" -b outdated" % (user_name, user_channel, profile_path, build_profile_path), shell=True)
+    else:
+        check_call("conan create . %s/%s -pr \"%s\" -b outdated" % (user_name, user_channel, profile_path), shell=True)
 
     print("Installing artifacts")
     check_call("conan install %s -pr \"%s\"" % (package_name, profile_path), shell=True)
