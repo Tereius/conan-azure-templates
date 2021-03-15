@@ -108,7 +108,7 @@ if __name__ == "__main__":
     else:
         check_call("conan create . %s/%s -pr \"%s\" -b outdated" % (user_name, user_channel, profile_path), shell=True)
 
-    if 'CONAN_SKIP_INSTALL_ARTIFACTS' not in os.environ:
+    if 'SKIP_INSTALL_ARTIFACTS' not in os.environ:
         print("Installing artifacts")
         check_call("conan install %s -pr \"%s\"" % (package_name, profile_path), shell=True)
     else:
