@@ -104,12 +104,21 @@ if __name__ == "__main__":
 
     print("Building recipe with reference: " + package_ref)
     if build_profile_path is not None:
+        print("-----Building dependencies (host-, build-profile)-----")
+        check_call("conan install . %s/%s -pr:h \"%s\" -pr:b \"%s\" -b outdated" % (user_name, user_channel, profile_path, build_profile_path), shell=True)
+        os.system("conan remove \"*\" -s -b -f") # Clean up the conan cache to free some memory
+        print("-----Building recipe (host-, build-profile)-----")
         check_call("conan create . %s/%s -pr:h \"%s\" -pr:b \"%s\" -b outdated" % (user_name, user_channel, profile_path, build_profile_path), shell=True)
+        print("-----Building recipe finished (host-, build-profile)-----")
     else:
+        print("-----Building dependencies (single profile)-----")
+        check_call("conan install . %s/%s -pr \"%s\" -b outdated" % (user_name, user_channel, profile_path), shell=True)
+        os.system("conan remove \"*\" -s -b -f") # Clean up the conan cache to free some memory
+        print("-----Building recipe (single profile)-----")
         check_call("conan create . %s/%s -pr \"%s\" -b outdated" % (user_name, user_channel, profile_path), shell=True)
+        print("-----Building recipe finished (single profile)-----")
 
     if 'SKIP_INSTALL_ARTIFACTS' not in os.environ:
-        print("Installing artifacts")
+        print("-----Installing artifacts-----")
         check_call("conan install %s -pr \"%s\"" % (package_name, profile_path), shell=True)
-    else:
-        print("Skip installing artifacts")
+    print("-----Finished-----")
