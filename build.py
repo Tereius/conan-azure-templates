@@ -25,6 +25,9 @@ if __name__ == "__main__":
     build_profile_path = None
     os.system("conan profile new ./ci-profile")
 
+    if 'CONAN_BASE_PROFILE' in os.environ:
+        profile_path = os.environ['CONAN_BASE_PROFILE']
+
     if 'CONAN_BASE_PROFILE_PATH' in os.environ:
         profile_path = os.environ['CONAN_BASE_PROFILE_PATH']
 
