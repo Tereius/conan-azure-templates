@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from subprocess import check_output
+from subprocess import check_output, check_call
 import os
 import random
 import string
