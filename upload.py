@@ -32,9 +32,9 @@ if __name__ == "__main__":
     rep_name = randomString()
 
     print("Adding remote for upload: " + os.environ['CONAN_UPLOAD'])
-    os.system(["conan", "remote", "add", "-f", rep_name, os.environ['CONAN_UPLOAD']])
+    check_output(["conan", "remote", "add", "-f", rep_name, os.environ['CONAN_UPLOAD']])
     try:
-        os.system(["conan", "user", "-p", os.environ['CONAN_PASSWORD'], "-r", rep_name, os.environ['CONAN_LOGIN_USERNAME']])
+        check_output(["conan", "user", "-p", os.environ['CONAN_PASSWORD'], "-r", rep_name, os.environ['CONAN_LOGIN_USERNAME']])
     except:
         print("Warning: Couldn't set user credentials for remote")
     version = check_output(["conan", "inspect", ".", "-a", "version"]).decode("ascii").rstrip()
