@@ -16,7 +16,7 @@ steps:
 
 - script: |
     pip install --upgrade pip
-    pip install conan==1.33.1
+    pip install conan==1.41.0
     conan user
   displayName: 'Install conan'
   
