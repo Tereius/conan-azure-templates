@@ -88,11 +88,19 @@ if __name__ == "__main__":
 
     user_name = "user"
     user_channel = "testing"
+    package_name = ""
+    recipe_path = "."
     if 'CONAN_USERNAME' in os.environ:
         user_name = os.environ['CONAN_USERNAME']
 
     if 'CONAN_CHANNEL' in os.environ:
         user_channel = os.environ['CONAN_CHANNEL']
+        
+    if 'CONAN_PACKAGE_NAME' in os.environ:
+        package_name = os.environ['CONAN_PACKAGE_NAME']
+        
+    if 'CONAN_RECIPE_PATH' in os.environ:
+        recipe_path = os.environ['CONAN_RECIPE_PATH']
 
     if 'CONAN_REMOTES' in os.environ:
         for remote in os.environ['CONAN_REMOTES'].split(','):
@@ -100,25 +108,26 @@ if __name__ == "__main__":
             print("Adding remote: " + rep_name + " url: " + remote)
             os.system("conan remote add -f %s %s" % (rep_name, remote))
 
-    version = check_output(["conan", "inspect", ".", "-a", "version"]).decode("ascii").rstrip()
-    name = check_output(["conan", "inspect", ".", "-a", "name"]).decode("ascii").rstrip()
-    package_ref = "%s/%s" % (user_name, user_channel)
-    package_name = "%s/%s@%s" % (name[6:], version[9:], package_ref)
+    if not package_name:
+        version = check_output(["conan", "inspect", recipe_path, "-a", "version"]).decode("ascii").rstrip()
+        name = check_output(["conan", "inspect", recipe_path, "-a", "name"]).decode("ascii").rstrip()
+        package_ref = "%s/%s" % (user_name, user_channel)
+        package_name = "%s/%s@%s" % (name[6:], version[9:], package_ref)
 
-    print("Building recipe with reference: " + package_ref)
+    print("Building recipe: " + package_name)
     if build_profile_path is not None:
         print("-----Building dependencies (host-, build-profile)-----")
-        check_call("conan install . %s/%s -pr:h \"%s\" -pr:b \"%s\" -b outdated" % (user_name, user_channel, profile_path, build_profile_path), shell=True)
+        check_call("conan install %s %s -pr:h \"%s\" -pr:b \"%s\" -b outdated" % (recipe_path, package_name, profile_path, build_profile_path), shell=True)
         os.system("conan remove \"*\" -s -b -f") # Clean up the conan cache to free some memory
         print("-----Building recipe (host-, build-profile)-----")
-        check_call("conan create . %s/%s -pr:h \"%s\" -pr:b \"%s\" -b outdated" % (user_name, user_channel, profile_path, build_profile_path), shell=True)
+        check_call("conan create %s %s -pr:h \"%s\" -pr:b \"%s\" -b outdated" % (recipe_path, package_name, profile_path, build_profile_path), shell=True)
         print("-----Building recipe finished (host-, build-profile)-----")
     else:
         print("-----Building dependencies (single profile)-----")
-        check_call("conan install . %s/%s -pr \"%s\" -b outdated" % (user_name, user_channel, profile_path), shell=True)
+        check_call("conan install %s %s -pr \"%s\" -b outdated" % (recipe_path, package_name, profile_path), shell=True)
         os.system("conan remove \"*\" -s -b -f") # Clean up the conan cache to free some memory
         print("-----Building recipe (single profile)-----")
-        check_call("conan create . %s/%s -pr \"%s\" -b outdated" % (user_name, user_channel, profile_path), shell=True)
+        check_call("conan create %s %s -pr \"%s\" -b outdated" % (recipe_path, package_name, profile_path), shell=True)
         print("-----Building recipe finished (single profile)-----")
 
     if 'SKIP_INSTALL_ARTIFACTS' not in os.environ:
