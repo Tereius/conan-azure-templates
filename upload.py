@@ -45,10 +45,10 @@ if __name__ == "__main__":
         check_output(["conan", "user", "-p", os.environ['CONAN_PASSWORD'], "-r", rep_name, os.environ['CONAN_LOGIN_USERNAME']])
     except:
         print("Warning: Couldn't set user credentials for remote")
-    version = check_output(["conan", "inspect", recipe_path, "-a", "version"]).decode("ascii").rstrip()
-    name = check_output(["conan", "inspect", recipe_path, "-a", "name"]).decode("ascii").rstrip()
 
     if not package_name:
+        version = check_output(["conan", "inspect", recipe_path, "-a", "version"]).decode("ascii").rstrip()
+        name = check_output(["conan", "inspect", recipe_path, "-a", "name"]).decode("ascii").rstrip()
         package_ref = "%s/%s" % (user_name, user_channel)
         package_name = "%s/%s@%s" % (name[6:], version[9:], package_ref)
 
