@@ -106,7 +106,7 @@ if __name__ == "__main__":
         for remote in os.environ['CONAN_REMOTES'].split(','):
             rep_name = randomString()
             print("Adding remote: " + rep_name + " url: " + remote)
-            os.system("conan remote add -f %s %s" % (rep_name, remote))
+            os.system("conan remote add -i 0 -f %s %s" % (rep_name, remote))
 
     if not package_name:
         version = check_output(["conan", "inspect", recipe_path, "-a", "version"]).decode("ascii").rstrip()
