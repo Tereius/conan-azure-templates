@@ -22,6 +22,7 @@ steps:
 - script: |
     ls -la .
     ls -la ..
+    la -la $(Pipeline.Workspace)/sourceCode
     pwd
     echo $(Build.Repository.Name)
   displayName: 'ls dirs'
