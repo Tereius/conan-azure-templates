@@ -14,7 +14,7 @@ def randomString(stringLength=10):
 
 if __name__ == "__main__":
      
-    recipe_path = "."
+    recipe_path = "./"
 
     if 'CONAN_RECIPE_PATH' in os.environ:
         recipe_path = os.environ['CONAN_RECIPE_PATH']
@@ -35,10 +35,10 @@ if __name__ == "__main__":
     except:
         print("Warning: Couldn't set user credentials for remote")
 
-    name = json.loads(check_output(["conan", "inspect", recipe_path, "-f", "json"], shell=True).decode("ascii"))["name"]
-    version = json.loads(check_output(["conan", "inspect", recipe_path, "-f", "json"], shell=True).decode("ascii"))["version"]
-    user = json.loads(check_output(["conan", "inspect", recipe_path, "-f", "json"], shell=True).decode("ascii"))["user"]
-    cannel = json.loads(check_output(["conan", "inspect", recipe_path, "-f", "json"], shell=True).decode("ascii"))["channel"]
+    name = json.loads(check_output("conan inspect %s -f json" % recipe_path, shell=True).decode("ascii"))["name"]
+    version = json.loads(check_output("conan inspect %s -f json" % recipe_path, shell=True).decode("ascii"))["version"]
+    user = json.loads(check_output("conan inspect %s -f json" % recipe_path, shell=True).decode("ascii"))["user"]
+    cannel = json.loads(check_output("conan inspect %s -f json" % recipe_path, shell=True).decode("ascii"))["channel"]
 
     package_ref = "%s/%s@%s/%s" % (name, version, user, cannel)
 
