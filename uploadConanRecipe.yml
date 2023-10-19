@@ -16,7 +16,7 @@ steps:
 
 - script: |
     pip install --upgrade pip
-    pip install conan==1.51.3
+    pip install conan==2.0.13
     conan user
   displayName: 'Install conan'
   
@@ -28,4 +28,3 @@ steps:
       scriptSource: filePath
       scriptPath: $(Pipeline.Workspace)/helper/upload.py
       workingDirectory: $(Pipeline.Workspace)/sourceCode
-      
