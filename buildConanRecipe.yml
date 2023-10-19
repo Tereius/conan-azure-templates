@@ -15,8 +15,8 @@ steps:
   displayName: 'Setup python'
 
 - script: |
-    python3 -m pip install --upgrade pip
-    python3 -m pip install conan==2.0.13
+    pip install --upgrade pip
+    pip install conan==2.0.13
   displayName: 'Install conan'
 
 - script: |

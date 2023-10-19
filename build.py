@@ -20,9 +20,9 @@ if __name__ == "__main__":
     print(sys.version)
 
     host_profile_path = None
-    check_call("conan profile detect")
-    check_call("conan config install global.conf")
-    check_call("conan config install -tf extensions/hooks hook_clean_cache.py")
+    check_call("conan profile detect", shell=True)
+    check_call("conan config install global.conf", shell=True)
+    check_call("conan config install -tf extensions/hooks hook_clean_cache.py", shell=True)
 
     if 'CONAN_HOST_PROFILE_PATH' in os.environ:
         host_profile_path = os.environ['CONAN_HOST_PROFILE_PATH']
@@ -36,12 +36,12 @@ if __name__ == "__main__":
         for remote in os.environ['CONAN_REMOTES'].split(','):
             rep_name = randomString()
             print("Adding remote: " + rep_name + " url: " + remote)
-            check_call("conan remote add --index 0 --force %s %s" % (rep_name, remote))
+            check_call("conan remote add --index 0 --force %s %s" % (rep_name, remote), shell=True)
 
-    name = json.loads(check_output(["conan", "inspect", recipe_path, "-f", "json"]).decode("ascii"))["name"]
-    version = json.loads(check_output(["conan", "inspect", recipe_path, "-f", "json"]).decode("ascii"))["version"]
-    user = json.loads(check_output(["conan", "inspect", recipe_path, "-f", "json"]).decode("ascii"))["user"]
-    cannel = json.loads(check_output(["conan", "inspect", recipe_path, "-f", "json"]).decode("ascii"))["channel"]
+    name = json.loads(check_output(["conan", "inspect", recipe_path, "-f", "json"], shell=True).decode("ascii"))["name"]
+    version = json.loads(check_output(["conan", "inspect", recipe_path, "-f", "json"], shell=True).decode("ascii"))["version"]
+    user = json.loads(check_output(["conan", "inspect", recipe_path, "-f", "json"], shell=True).decode("ascii"))["user"]
+    cannel = json.loads(check_output(["conan", "inspect", recipe_path, "-f", "json"], shell=True).decode("ascii"))["channel"]
 
     package_ref = "%s/%s@%s/%s" % (name, version, user, cannel)
 
