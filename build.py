@@ -50,8 +50,8 @@ if __name__ == "__main__":
 
     if host_profile_path is not None:
         print("Cross building recipe: " + package_ref)
-        check_call("conan create %s -pr:h \"%s\" -tf "" -u -b missing" % (recipe_path, host_profile_path), shell=True)
+        check_call("conan create %s -pr:h \"%s\" -tf \"\" -u -b missing" % (recipe_path, host_profile_path), shell=True)
     else:
         print("Building recipe: " + package_ref)
-        check_call("conan create %s -tf "" -u -b missing" % (recipe_path), shell=True)
+        check_call("conan create %s -tf \"\" -u -b missing" % (recipe_path), shell=True)
     print("-----Finished-----")
