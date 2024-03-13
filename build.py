@@ -41,6 +41,11 @@ if __name__ == "__main__":
             print("Adding remote: " + rep_name + " url: " + remote)
             check_call("conan remote add --index 0 --force %s %s" % (rep_name, remote), shell=True)
 
+    options = ""
+    if 'CONAN_OPTIONS' in os.environ:
+        for option in os.environ['CONAN_OPTIONS'].split(','):
+            options += " -o " + option
+
     name = json.loads(check_output("conan inspect %s -f json" % recipe_path, shell=True).decode("ascii"))["name"]
     version = json.loads(check_output("conan inspect %s -f json" % recipe_path, shell=True).decode("ascii"))["version"]
     user = json.loads(check_output("conan inspect %s -f json" % recipe_path, shell=True).decode("ascii"))["user"]
@@ -50,8 +55,8 @@ if __name__ == "__main__":
 
     if host_profile_path is not None:
         print("Cross building recipe: " + package_ref)
-        check_call("conan create %s -pr:h \"%s\" -tf \"\" -u -b missing" % (recipe_path, host_profile_path), shell=True)
+        check_call("conan create %s -pr:h \"%s\" -tf \"\" %s -u -b missing" % (recipe_path, host_profile_path, options), shell=True)
     else:
         print("Building recipe: " + package_ref)
-        check_call("conan create %s -tf \"\" -u -b missing" % (recipe_path), shell=True)
+        check_call("conan create %s -tf \"\" %s -u -b missing" % (recipe_path, options), shell=True)
     print("-----Finished-----")
