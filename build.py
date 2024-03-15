@@ -17,11 +17,6 @@ helper_dir = os.path.dirname(__file__)
 
 if __name__ == "__main__":
 
-    print("Using Python version")
-    print(sys.version)
-    print("cwd")
-    print(os.getcwd())
-
     host_profile_path = None
     check_call("conan profile detect", shell=True)
     check_call("conan config install %s" % os.path.join(helper_dir, "global.conf"), shell=True)
