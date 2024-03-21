@@ -31,9 +31,9 @@ if __name__ == "__main__":
     rep_name = randomString()
 
     print("Adding remote for upload: " + os.environ['CONAN_UPLOAD'])
-    check_output(["conan", "remote", "add", "--force", rep_name, os.environ['CONAN_UPLOAD']], shell=True)
+    check_call("conan remote add --index 0 --force %s %s" % (rep_name, os.environ['CONAN_UPLOAD']), shell=True)
     try:
-        check_output(["conan", "remote", "login", "-p", os.environ['CONAN_PASSWORD'], rep_name, os.environ['CONAN_LOGIN_USERNAME']], shell=True)
+        check_call("conan remote login -p %s %s %s" % (os.environ['CONAN_PASSWORD'], rep_name, os.environ['CONAN_LOGIN_USERNAME']), shell=True)
     except:
         print("Warning: Couldn't set user credentials for remote")
 
@@ -45,10 +45,10 @@ if __name__ == "__main__":
     package_ref = "%s/%s@%s/%s" % (name, version, user, cannel)
 
     print("Exporting recipe: " + package_ref)
-    check_call(["conan", "export", recipe_path], shell=True)
+    check_call("conan export %s" % recipe_path, shell=True)
     if upload_all:
         print("Uploading recipe and package: " + package_ref)
-        check_call(["conan", "upload", package_ref, "-r", rep_name], shell=True)
+        check_call("conan upload %s -r %s" % (package_ref, rep_name), shell=True)
     else:
         print("Uploading recipe: " + package_ref)
-        check_call(["conan", "upload", package_ref, "-r", rep_name, "--only-recipe"], shell=True) 
+        check_call("conan upload %s -r %s --only-recipe" % (package_ref, rep_name), shell=True)
