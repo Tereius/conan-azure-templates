@@ -52,3 +52,7 @@ if __name__ == "__main__":
     else:
         print("Uploading recipe: " + package_ref)
         check_call("conan upload %s -r %s --only-recipe" % (package_ref, rep_name), shell=True)
+
+    print("##vso[build.addbuildtag]conan-upload")
+    print("##vso[build.addbuildtag]branch-%s" % os.environ['BRANCH'])
+    print("##vso[build.addbuildtag]%s" % package_ref)
