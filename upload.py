@@ -52,6 +52,3 @@ if __name__ == "__main__":
     else:
         print("Uploading recipe: " + package_ref)
         check_call("conan upload %s -r %s --only-recipe" % (package_ref, rep_name), shell=True)
-
-    with open('conan_upload_info.json', 'w') as f:
-        json.dump({"package_ref": package_ref}, f)

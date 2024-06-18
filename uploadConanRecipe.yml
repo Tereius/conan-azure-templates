@@ -8,11 +8,11 @@ steps:
 - checkout: templates
   path: helper
 - task: UsePythonVersion@0
-  displayName: 'Setup python'
   inputs:
     versionSpec: "3.x"
     addToPath: true
     architecture: "x64"
+  displayName: 'Setup python'
 
 - script: |
     pip install --upgrade pip
@@ -27,9 +27,3 @@ steps:
       scriptSource: filePath
       scriptPath: $(Pipeline.Workspace)/helper/upload.py
       workingDirectory: $(Pipeline.Workspace)/sourceCode
-
-- task: PublishPipelineArtifact@1
-  displayName: 'Publish conan_upload_info artifact'
-  inputs:
-    targetPath: $(Pipeline.Workspace)/sourceCode/conan_upload_info.json
-    artifactName: conan_upload_info
