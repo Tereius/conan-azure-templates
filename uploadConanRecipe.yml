@@ -8,11 +8,11 @@ steps:
 - checkout: templates
   path: helper
 - task: UsePythonVersion@0
+  displayName: 'Setup python'
   inputs:
     versionSpec: "3.x"
     addToPath: true
     architecture: "x64"
-  displayName: 'Setup python'
 
 - script: |
     pip install --upgrade pip
