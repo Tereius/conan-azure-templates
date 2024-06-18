@@ -54,6 +54,7 @@ if __name__ == "__main__":
         print("Uploading recipe: " + package_ref)
         check_call("conan upload %s -r %s --only-recipe" % (package_ref, rep_name), shell=True)
 
+    # keep the package_ref at first place for conan badge creation in shields.io
     print("##vso[build.addbuildtag]%s" % package_ref)
     time.sleep(10) # addbuildtag is run async - make sure the order of tags is preserved 
     print("##vso[build.addbuildtag]conan-upload")
