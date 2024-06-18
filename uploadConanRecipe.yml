@@ -23,7 +23,7 @@ steps:
   displayName: 'Upload recipe'
   timeoutInMinutes: 15
   env: 
-    ${{ parameters.conanEnv }}
+    ${{ insert }}: ${{ parameters.conanEnv }}
     BRANCH: $(Build.SourceBranchName)
   inputs:
       scriptSource: filePath
