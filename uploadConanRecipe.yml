@@ -22,7 +22,8 @@ steps:
 - task: PythonScript@0
   displayName: 'Upload recipe'
   timeoutInMinutes: 15
-  env: ${{ parameters.conanEnv }}
+  env: 
+    ${{ parameters.conanEnv }}
     BRANCH: $(Build.SourceBranchName)
   inputs:
       scriptSource: filePath
