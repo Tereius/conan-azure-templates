@@ -6,6 +6,7 @@ import os
 import random
 import string
 import json
+import time
 
 
 def randomString(stringLength=10):
@@ -53,6 +54,9 @@ if __name__ == "__main__":
         print("Uploading recipe: " + package_ref)
         check_call("conan upload %s -r %s --only-recipe" % (package_ref, rep_name), shell=True)
 
-    print("##vso[build.addbuildtag]conan-upload")
-    print("##vso[build.addbuildtag]branch-%s" % os.environ['BRANCH'])
     print("##vso[build.addbuildtag]%s" % package_ref)
+    time.sleep(10) # addbuildtag is run async - make sure the order of tags is preserved 
+    print("##vso[build.addbuildtag]conan-upload")
+    time.sleep(10)
+    print("##vso[build.addbuildtag]%s" % os.environ['BRANCH'])
+    time.sleep(10)
