@@ -16,39 +16,16 @@ steps:
 
 - script: |
     pip install --upgrade pip
-    pip install conan==1.51.3
-    conan user
+    pip install conan==2.3.1
   displayName: 'Install conan'
 
 - script: |
     ls -la .
     ls -la ..
+    ls -la $(Pipeline.Workspace)/sourceCode
     pwd
     echo $(Build.Repository.Name)
   displayName: 'ls dirs'
-  
-- task: PythonScript@0
-  displayName: 'Switch default build tools'
-  env: ${{ parameters.conanEnv }}
-  inputs:
-      scriptSource: inline
-      script: |
-        from subprocess import check_output
-        from conans.tools import os_info
-        import os
-        
-        if __name__ == "__main__":
-            if os_info.is_macos:
-                if 'CONAN_BASE_PROFILE_COMPILER_VERSION' in os.environ:
-                    clang_ver = os.environ['CONAN_BASE_PROFILE_COMPILER_VERSION'].split(".")
-                    major = int(clang_ver[0])
-                    print("Switching to Xcode major version: " + str(major))
-                    if major == 9:
-                        os.system("sudo xcode-select -switch /Applications/Xcode_9.4.1.app")
-                    elif major == 10:
-                        os.system("sudo xcode-select -switch /Applications/Xcode_10.3.app")
-                    elif major == 11:
-                        os.system("sudo xcode-select -switch /Applications/Xcode_11.3.1.app")
   
 - task: PythonScript@0
   displayName: 'Build recipe'

@@ -5,31 +5,23 @@ from subprocess import check_output, check_call
 import os
 import random
 import string
+import json
+import time
 
 
 def randomString(stringLength=10):
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(stringLength))
 
+
 if __name__ == "__main__":
+     
+    recipe_path = "./"
 
-    user_name = "user"
-    user_channel = "testing"
-    package_name = ""
-    recipe_path = "."
-    upload_all = False
-    if 'CONAN_USERNAME' in os.environ:
-        user_name = os.environ['CONAN_USERNAME']
-
-    if 'CONAN_CHANNEL' in os.environ:
-        user_channel = os.environ['CONAN_CHANNEL']
-        
-    if 'CONAN_PACKAGE_NAME' in os.environ:
-        package_name = os.environ['CONAN_PACKAGE_NAME']
-        
     if 'CONAN_RECIPE_PATH' in os.environ:
         recipe_path = os.environ['CONAN_RECIPE_PATH']
     
+    upload_all = False
     if 'UPLOAD_ALL' in os.environ:
         upload_all = True
     
@@ -40,23 +32,32 @@ if __name__ == "__main__":
     rep_name = randomString()
 
     print("Adding remote for upload: " + os.environ['CONAN_UPLOAD'])
-    check_output(["conan", "remote", "add", "-f", rep_name, os.environ['CONAN_UPLOAD']])
+    check_call("conan remote add --index 0 --force %s %s" % (rep_name, os.environ['CONAN_UPLOAD']), shell=True)
     try:
-        check_output(["conan", "user", "-p", os.environ['CONAN_PASSWORD'], "-r", rep_name, os.environ['CONAN_LOGIN_USERNAME']])
+        check_call("conan remote login -p %s %s %s" % (os.environ['CONAN_PASSWORD'], rep_name, os.environ['CONAN_LOGIN_USERNAME']), shell=True)
     except:
         print("Warning: Couldn't set user credentials for remote")
 
-    if not package_name:
-        version = check_output(["conan", "inspect", recipe_path, "-a", "version"]).decode("ascii").rstrip()
-        name = check_output(["conan", "inspect", recipe_path, "-a", "name"]).decode("ascii").rstrip()
-        package_ref = "%s/%s" % (user_name, user_channel)
-        package_name = "%s/%s@%s" % (name[6:], version[9:], package_ref)
+    name = json.loads(check_output("conan inspect %s -f json" % recipe_path, shell=True).decode("ascii"))["name"]
+    version = json.loads(check_output("conan inspect %s -f json" % recipe_path, shell=True).decode("ascii"))["version"]
+    user = json.loads(check_output("conan inspect %s -f json" % recipe_path, shell=True).decode("ascii"))["user"]
+    cannel = json.loads(check_output("conan inspect %s -f json" % recipe_path, shell=True).decode("ascii"))["channel"]
 
-    print("Exporting recipe: " + package_name)
-    check_call(["conan", "export", recipe_path, package_name])
+    package_ref = "%s/%s@%s/%s" % (name, version, user, cannel)
+
+    print("Exporting recipe: " + package_ref)
+    check_call("conan export %s" % recipe_path, shell=True)
     if upload_all:
-        print("Uploading recipe and package: " + package_name)
-        check_call(["conan", "upload", package_name, "-r", rep_name, "--all", "--retry", "3", "--retry-wait", "240"])
+        print("Uploading recipe and package: " + package_ref)
+        check_call("conan upload %s -r %s" % (package_ref, rep_name), shell=True)
     else:
-        print("Uploading recipe: " + package_name)
-        check_call(["conan", "upload", package_name, "-r", rep_name, "--retry", "3", "--retry-wait", "240"]) 
+        print("Uploading recipe: " + package_ref)
+        check_call("conan upload %s -r %s --only-recipe" % (package_ref, rep_name), shell=True)
+
+    # keep the package_ref at first place for conan badge creation in shields.io
+    print("##vso[build.addbuildtag]%s" % package_ref)
+    time.sleep(10) # addbuildtag is run async - make sure the order of tags is preserved 
+    print("##vso[build.addbuildtag]conan-upload")
+    time.sleep(10)
+    print("##vso[build.addbuildtag]%s" % os.environ['BRANCH'])
+    time.sleep(10)

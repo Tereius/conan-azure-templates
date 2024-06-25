@@ -16,16 +16,16 @@ steps:
 
 - script: |
     pip install --upgrade pip
-    pip install conan==1.51.3
-    conan user
+    pip install conan==2.3.1
   displayName: 'Install conan'
   
 - task: PythonScript@0
   displayName: 'Upload recipe'
   timeoutInMinutes: 15
-  env: ${{ parameters.conanEnv }}
+  env: 
+    ${{ insert }}: ${{ parameters.conanEnv }}
+    BRANCH: $(Build.SourceBranchName)
   inputs:
       scriptSource: filePath
       scriptPath: $(Pipeline.Workspace)/helper/upload.py
       workingDirectory: $(Pipeline.Workspace)/sourceCode
-      
