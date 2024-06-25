@@ -12,7 +12,7 @@ jobs:
     - task: Docker@2
       displayName: 'Build and push'
       inputs:
-        repository: ghcr.io/Tereius/ConanWine
+        repository: ghcr.io/tereius/conanwine
         Dockerfile: docker/wine/Dockerfile
         buildContext: docker/wine/
         command: buildAndPush
