@@ -5,7 +5,7 @@ LABEL org.opencontainers.image.description="This image provides a wine environme
 LABEL org.opencontainers.image.source="https://github.com/Tereius/conan-azure-templates/tree/master/docker/wine"
 LABEL org.opencontainers.image.url="https://github.com/Tereius/conan-azure-templates/pkgs/container/conan-wine"
 
-RUN useradd -d /home/conan -u 23100 conan
+RUN useradd -d /home/conan -u 10000 conan
 RUN wine64 pip install conan==2.3.1
 
 USER conan
