@@ -1,7 +1,7 @@
 jobs:
   - job: build_conan_wine_image
     pool:
-      name: Google Cloud
+      vmImage: "ubuntu-latest"
     timeoutInMinutes: 20
     steps:
     - task: Docker@2

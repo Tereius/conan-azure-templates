@@ -60,4 +60,4 @@ The following conan parameter can be provided to the build/upload jobs:
 
 ### Azure pipeline using Docker Images
 
-In contrast to the Microsoft-hosted VM images you may want to build the conan package in a Docker Container 
+In contrast to the Microsoft-hosted VM images you may want to build the conan package in a Docker Container.
